@@ -1,6 +1,6 @@
 let entities = [];
 const types = ["rock", "paper", "scissors"];
-const n = 3000;
+const n = 200;
 let qt;
 
 function setup() {
@@ -8,7 +8,7 @@ function setup() {
   qt = new QuadTree(0, 0, windowWidth, windowHeight);
 
   for (let i = 0; i < n; i++) {
-    entities.push(new RPS(types[getRandomInt(2)]));
+    entities.push(new RPS(types[getRandomInt(2)], i));
   }
 }
 
@@ -20,7 +20,7 @@ function draw() {
     qt.add(entity);
   }
   for (const entity of entities) {
-    entity.update(qt);
+    entity.update(qt, entities);
   }
   qt.show();
 }
