@@ -5,18 +5,17 @@ const targetMap = {
   paper: "rock",
 };
 const vision = 200;
+const jiggleForce = 0.1;
 
 class RPS {
   constructor(type, index) {
     this.type = type;
-    this.range = 100;
+    this.range = 1000;
     this.position = createVector(random(windowWidth), random(windowHeight));
-    this.diameter = 10;
+    this.diameter = 15;
     this.acceleration = createVector(0, 0);
-    this.velocity = {
-      x: (Math.random() * maxSpeed) / (Math.random() < 0.5 ? 2 : -2),
-      y: (Math.random() * maxSpeed) / (Math.random() < 0.5 ? 2 : -2),
-    };
+    this.maxSpeed = 3;
+    this.velocity = createVector(Math.random() * this.maxSpeed * 2 - this.maxSpeed, Math.random() * this.maxSpeed * 2 - this.maxSpeed);
     this.targetType = targetMap[type];
     this.index = index;
   }
@@ -38,7 +37,7 @@ class RPS {
     circle(this.position.x, this.position.y, this.diameter);
     noFill();
     stroke(1);
-    circle(this.position.x, this.position.y, this.range);
+    // circle(this.position.x, this.position.y, this.range);
     fill("white");
   }
 
@@ -47,11 +46,13 @@ class RPS {
       .query(this.range, this.position)
       .filter((entity) => entity.type == this.targetType)
       .map((entity) => ({
-        distance: dist(this.position.x, this.position.y, entity.x, entity.y),
+        distance: dist(this.position.x, this.position.y, entity.position.x, entity.position.y),
         ...entity,
       }));
     found.sort((a, b) => a.distance - b.distance);
     if (found.length > 0) this.moveTo(found[0].position.x, found[0].position.y);
+    this.jiggle();
+    this.velocity.limit(this.maxSpeed);
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.x < 0) this.position.x = window.innerWidth + this.position.x;
@@ -79,11 +80,6 @@ class RPS {
     }
   }
 
-  applyForce(force) {
-    this.acceleration.add(force);
-    this.acceleration.limit(this.maxForce);
-  }
-
   seek(target) {
     if (!target) return;
     const desired = p5.Vector.sub(target, this.position);
@@ -96,5 +92,12 @@ class RPS {
     steer.limit(this.maxForce); // Limit to maximum steering force
 
     this.applyForce(steer);
+  }
+
+  jiggle() {
+    const num = jiggleForce * 3;
+    const randomVector = createVector(random(-num, num), random(-num, num));
+    this.velocity.x += randomVector.x;
+    this.velocity.y += randomVector.y;
   }
 }
