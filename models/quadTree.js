@@ -1,6 +1,6 @@
-const maxPerCell = 10;
+const maxPerCell = 20;
 const getAreaFilter = (area) => (p) => p.position.x >= area.x && p.position.x <= area.x + area.w && p.position.y >= area.y && p.position.y <= area.y + area.h;
-const depthLimit = 20;
+const depthLimit = 100;
 
 class QuadTree {
   constructor(x, y, w, h, depth = 0) {
@@ -86,6 +86,39 @@ class QuadTree {
         continue;
       }
       node.show();
+    }
+  }
+
+  clear() {
+    for (const key in this.nodes) {
+      const node = this.nodes[key];
+      if (Array.isArray(node)) {
+        node.length = 0;
+        continue;
+      }
+      node.clear();
+    }
+  }
+
+  purge() {
+    for (const key in this.nodes) {
+      const node = this.nodes[key];
+      if (!Array.isArray(node)) {
+        if (node.isEmpty()) this.nodes[key] = [];
+      }
+    }
+  }
+
+  isEmpty() {
+    let iAmEmpty = true;
+    for (const key in this.nodes) {
+      const node = this.nodes[key];
+      if (!Array.isArray(node)) {
+        iAmEmpty = node.isEmpty();
+        if (!iAmEmpty) return false;
+        continue;
+      }
+      if (node.length > 0) return false;
     }
   }
 }
