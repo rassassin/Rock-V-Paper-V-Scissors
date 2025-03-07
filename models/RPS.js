@@ -50,7 +50,7 @@ class RPS {
     if (targets.length > 0) this.moveTo(targets[0].position.x, targets[0].position.y);
     else if (ops.length > 0) {
       this.moveAway(ops[0].position.x, ops[0].position.y);
-      this.jiggle(0.2);
+      // this.jiggle(0.2);
     }
     this.jiggle(0.1);
     this.velocity.limit(this.maxSpeed);
