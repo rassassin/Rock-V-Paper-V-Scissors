@@ -1,4 +1,4 @@
-const maxSpeed = 4;
+const maxSpeed = 2;
 const targetMap = {
   rock: "scissors",
   scissors: "paper",
@@ -7,13 +7,13 @@ const targetMap = {
 const vision = 200;
 
 class RPS {
-  constructor(type, index) {
+  constructor(type, index, diameter = 15) {
     this.type = type;
     this.range = 150;
     this.position = createVector(random(windowWidth), random(windowHeight));
-    this.diameter = 15;
+    this.diameter = diameter;
     this.acceleration = createVector(0, 0);
-    this.maxSpeed = 2;
+    this.maxSpeed = maxSpeed;
     this.velocity = createVector(getRandom(this.maxSpeed, -this.maxSpeed), getRandom(this.maxSpeed, -this.maxSpeed));
     this.targetType = targetMap[type];
     this.index = index;
@@ -39,7 +39,7 @@ class RPS {
     fill("white");
   }
 
-  update(qt, entities) {
+  update(qt, entities, magnets) {
     let found = qt.query(this.range, this.position).map((entity) => ({
       distance: dist(this.position.x, this.position.y, entity.position.x, entity.position.y),
       ...entity,
@@ -91,7 +91,7 @@ class RPS {
 
   convertEntity(closest, entities) {
     if (closest && closest.distance < this.diameter) {
-      entities[closest.index].setType(this.type);
+      entities[closest.index]?.setType(this.type);
     }
   }
 

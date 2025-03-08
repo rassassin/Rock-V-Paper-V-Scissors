@@ -25,11 +25,8 @@ function draw() {
 
   if (mouseIsPressed === true) {
     if (mouseButton === LEFT) {
-      const magnet = new Magnet(mousePosition);
-      magnets.push(magnet);
-      qt.add(magnet);
+      magnets.push(new RPS(types[getRandomInt(2)], n + 1, 40));
     }
-    console.log(magnets.length);
   }
 
   let rocks = 0;
@@ -62,8 +59,12 @@ function draw() {
     }, 15000);
   }
 
+  for (const magnet of magnets) {
+    qt.add(magnet);
+  }
+
   for (const entity of entities) {
-    entity.update(qt, entities);
+    entity.update(qt, entities, magnets);
   }
 
   showHud(rocks, papers, scissors);

@@ -1,7 +1,7 @@
 class Magnet {
   constructor(position) {
     this.position = position;
-    this.diameter = 20;
+    this.diameter = 40;
   }
 
   show() {
