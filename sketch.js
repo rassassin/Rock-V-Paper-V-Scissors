@@ -16,6 +16,7 @@ function setup() {
 let resetTimeout;
 
 function draw() {
+  let mouseHasBeenClicked = false;
   let allSame = true;
   let lastType;
   qt.clear();
@@ -23,10 +24,10 @@ function draw() {
 
   let mousePosition = createVector(mouseX, mouseY);
 
-  if (mouseIsPressed === true) {
-    if (mouseButton === LEFT) {
-      magnets.push(new RPS(types[getRandomInt(2)], n + 1, 40));
-    }
+  if (mouseIsPressed === true && mouseButton === LEFT && !mouseHasBeenClicked) {
+    mouseHasBeenClicked = true;
+    entities.push(new RPS("magnet", n + 1, 40, mousePosition, 300));
+    // magnets.push(new RPS("magnet", n + 1, 40, mousePosition, 300));
   }
 
   let rocks = 0;

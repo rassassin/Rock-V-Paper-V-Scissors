@@ -5,18 +5,20 @@ const targetMap = {
   paper: "rock",
 };
 const vision = 200;
+let jiggleForce;
 
 class RPS {
-  constructor(type, index, diameter = 15) {
+  constructor(type, index, diameter = 15, position, range = 150) {
     this.type = type;
-    this.range = 150;
-    this.position = createVector(random(windowWidth), random(windowHeight));
+    this.range = range;
+    this.position = position ?? createVector(random(windowWidth), random(windowHeight));
     this.diameter = diameter;
     this.acceleration = createVector(0, 0);
     this.maxSpeed = maxSpeed;
     this.velocity = createVector(getRandom(this.maxSpeed, -this.maxSpeed), getRandom(this.maxSpeed, -this.maxSpeed));
     this.targetType = targetMap[type];
     this.index = index;
+    this.jiggleForce = this.type === "magnet" ? (jiggleForce = 10) : (jiggleForce = 0.1);
   }
 
   show() {
@@ -31,6 +33,7 @@ class RPS {
         fill("green");
         break;
       default:
+        fill("black");
         break;
     }
     circle(this.position.x, this.position.y, this.diameter);
@@ -39,20 +42,20 @@ class RPS {
     fill("white");
   }
 
-  update(qt, entities, magnets) {
+  update(qt, entities) {
     let found = qt.query(this.range, this.position).map((entity) => ({
       distance: dist(this.position.x, this.position.y, entity.position.x, entity.position.y),
       ...entity,
     }));
     found.sort((a, b) => a.distance - b.distance);
-    const targets = found.filter((entity) => entity.type == this.targetType);
+    const targets = found.filter((entity) => entity.type == this.targetType || entity.type == "magnet");
     const ops = found.filter((entity) => entity.targetType == this.type);
     if (targets.length > 0) this.moveTo(targets[0].position.x, targets[0].position.y);
     else if (ops.length > 0) {
       this.moveAway(ops[0].position.x, ops[0].position.y);
       // this.jiggle(0.2);
     }
-    this.jiggle(0.1);
+    this.jiggle(this.jiggleForce);
     this.velocity.limit(this.maxSpeed);
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
