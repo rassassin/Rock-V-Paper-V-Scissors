@@ -1,4 +1,5 @@
 let entities = [];
+let magnets = [];
 const types = ["rock", "paper", "scissors"];
 const n = 1500;
 let qt;
@@ -20,6 +21,17 @@ function draw() {
   qt.clear();
   background(220);
 
+  let mousePosition = createVector(mouseX, mouseY);
+
+  if (mouseIsPressed === true) {
+    if (mouseButton === LEFT) {
+      const magnet = new Magnet(mousePosition);
+      magnets.push(magnet);
+      qt.add(magnet);
+    }
+    console.log(magnets.length);
+  }
+
   let rocks = 0;
   let papers = 0;
   let scissors = 0;
@@ -37,7 +49,7 @@ function draw() {
       if (lastType != entity.type) allSame = false;
     }
   }
-  showHud(rocks, papers, scissors);
+
   qt.purge();
 
   if (allSame && !resetTimeout) {
@@ -54,6 +66,7 @@ function draw() {
     entity.update(qt, entities);
   }
 
+  showHud(rocks, papers, scissors);
   qt.show();
 }
 
@@ -64,6 +77,7 @@ function showHud(rocks, papers, scissors) {
   const strings = [`Rocks: ${rocks}`, `Paper: ${papers}`, `Scissors: ${scissors},`, `Total: ${n}`];
   noStroke();
   textSize(16);
+  textStyle(BOLD);
   let position = leftPadding;
   for (let i = 0; i < strings.length; i++) {
     if (i === 0) fill("red");
