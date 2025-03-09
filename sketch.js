@@ -1,7 +1,7 @@
 let entities = [];
 let magnets = [];
 const types = ["rock", "paper", "scissors"];
-const n = 1500;
+const n = 1000;
 let qt;
 
 function setup() {
@@ -76,9 +76,9 @@ function showHud(rocks, papers, scissors) {
   const leftPadding = 50;
   const topPadding = 50;
   const gap = 50;
-  const strings = [`Rocks: ${rocks}`, `Paper: ${papers}`, `Scissors: ${scissors},`, `Total: ${n}`];
+  const strings = [`Rocks: ${rocks}`, `Paper: ${papers}`, `Scissors: ${scissors}`, `Total: ${n}`];
   noStroke();
-  textSize(16);
+  textSize(20);
   textStyle(BOLD);
   let position = leftPadding;
   for (let i = 0; i < strings.length; i++) {

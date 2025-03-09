@@ -18,18 +18,21 @@ class RPS {
     this.velocity = createVector(getRandom(this.maxSpeed, -this.maxSpeed), getRandom(this.maxSpeed, -this.maxSpeed));
     this.targetType = targetMap[type];
     this.index = index;
-    this.jiggleForce = this.type === "magnet" ? (jiggleForce = 10) : (jiggleForce = 0.1);
+    this.jiggleForce = this.type === "magnet" ? (jiggleForce = 0.08) : (jiggleForce = 0.1);
   }
 
   show() {
     switch (this.type) {
       case "rock":
+        stroke("red");
         fill("red");
         break;
       case "paper":
+        stroke("purple");
         fill("purple");
         break;
       case "scissors":
+        stroke("green");
         fill("green");
         break;
       default:
