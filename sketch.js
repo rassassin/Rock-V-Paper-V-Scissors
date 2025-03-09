@@ -14,6 +14,8 @@ function setup() {
 }
 
 let resetTimeout;
+let lastClickTime = 0;
+const cooldownTime = 1000;
 
 function draw() {
   let mouseHasBeenClicked = false;
@@ -24,7 +26,7 @@ function draw() {
 
   let mousePosition = createVector(mouseX, mouseY);
 
-  if (mouseIsPressed === true && mouseButton === LEFT && !mouseHasBeenClicked) {
+  if (mouseIsPressed === true && mouseButton === LEFT && mousePressed()) {
     mouseHasBeenClicked = true;
     entities.push(new RPS("magnet", n + 1, 40, mousePosition, 300));
     // magnets.push(new RPS("magnet", n + 1, 40, mousePosition, 300));
@@ -91,6 +93,16 @@ function showHud(rocks, papers, scissors) {
     position += gap;
   }
 }
+
+const mousePressed = () => {
+  const currentTime = millis();
+
+  if (currentTime - lastClickTime >= cooldownTime) {
+    lastClickTime = currentTime;
+    return true;
+  }
+  return false;
+};
 
 const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
