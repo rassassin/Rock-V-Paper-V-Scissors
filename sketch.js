@@ -60,9 +60,9 @@ function draw() {
     }, 15000);
   }
 
-  for (const magnet of magnets) {
-    qt.add(magnet);
-  }
+  // for (const magnet of magnets) {
+  //   qt.add(magnet);
+  // }
 
   for (const entity of entities) {
     entity.update(qt, entities, magnets);
